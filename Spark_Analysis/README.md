@@ -1,0 +1,42 @@
+此项目使用了Apache Spark来处理和分析数据，具体包括计算两个变量之间的相关性、绘制折线图以及建立线性回归模型进行预测。以下是代码的详细解释：
+
+Spark会话创建：
+
+使用SparkSession创建一个Spark会话，这是使用Spark SQL和MLlib等功能的基础。
+
+数据加载与预处理：
+
+读取两个CSV文件到DataFrame df1和df2。
+对df2进行数据清洗，包括去除重复的tokens_address和删除含有缺失值的行。
+将df1中的token_transfers_value列转换为整数类型，并计算每个token_transfers_token_address的token_transfers_value总和，结果存储在result_df中。
+将df2中的tokens_decimals列转换为双精度浮点类型，并与result_df进行内连接，基于token_transfers_token_address和tokens_address列。
+
+相关性计算：
+
+使用corr函数计算tokens_decimals和total_value之间的相关系数，并将结果存储在correlation_df中。
+
+数据可视化：
+
+将合并后的DataFrame转换为Pandas DataFrame，并按照tokens_decimals排序。
+绘制tokens_decimals和total_value之间的折线图，以展示两者之间的关系。
+线性回归模型建立与预测：
+
+使用VectorAssembler将tokens_decimals列转换为特征向量。
+创建一个线性回归模型lr，设置特征列、标签列、最大迭代次数和正则化参数。
+构建一个包含VectorAssembler和LinearRegression的Pipeline，并使用合并后的DataFrame merged_df来拟合模型。
+使用拟合好的模型对merged_df进行预测，并将预测结果存储在predictions中。
+
+模型评估：
+
+使用RegressionEvaluator计算预测结果的R-squared（R2）值，以评估模型的拟合优度。
+
+执行结果
+
+代码将输出相关系数、折线图、预测结果以及R2值。相关系数反映了tokens_decimals和total_value之间的线性关系强度。折线图直观地展示了两者之间的关系。预测结果展示了原始数据、实际值和预测值。R2值衡量了模型解释的变异量比例，值越接近1，表示模型拟合得越好。
+
+预期的执行结果
+
+预期的输出将包括相关系数的数值、展示tokens_decimals和total_value关系的折线图、包含预测值的DataFrame以及模型的R2值。
+
+对执行结果的解释和对代码的分析总结
+这段代码展示了如何使用Spark进行数据处理、相关性分析、数据可视化以及机器学习模型的建立和评估。通过相关性计算，我们可以了解两个变量之间的关联程度。折线图提供了直观的视觉信息，帮助我们理解变量之间的关系。线性回归模型则允许我们基于一个变量来预测另一个变量的值，而R2值则为我们提供了一个量化模型性能的指标。
